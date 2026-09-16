@@ -4,6 +4,10 @@ An AI-powered document question-answering application that allows users to uploa
 
 The application uses Retrieval-Augmented Generation (RAG) to retrieve relevant information from documents before generating an answer with an LLM.
 
+
+🚀 **Live Demo:** [Open AI Document Q&A App](https://ai-document-app-rag.streamlit.app/)
+
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ai-document-app-rag.streamlit.app/)
 ## 🚀 Features
 
 - Upload one or multiple PDF documents
