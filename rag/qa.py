@@ -1,13 +1,18 @@
+import os
 import streamlit as st
-from langchain_ollama import ChatOllama
+from google import genai
 
 
 @st.cache_resource
 def get_llm():
-    return ChatOllama(
-        model="llama3.2",
-        temperature=0
-    )
+    api_key = os.getenv("GEMINI_API_KEY")
+
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY is not set.")
+
+    client = genai.Client(api_key=api_key)
+
+    return client
 
 
 def generate_answer(question, documents, chat_history):
@@ -31,13 +36,14 @@ PAGE: {document.metadata.get('page', 0) + 1}
         ]
     )
 
-    llm = get_llm()
+    client = get_llm()
 
     prompt = f"""
 You are a document question-answering assistant.
 
 Use the retrieved context as your source of truth.
 
+Rules:
 - Combine information from multiple chunks when necessary.
 - Give a clear answer in 2-4 sentences.
 - Do not add unsupported information.
@@ -56,6 +62,9 @@ QUESTION:
 Answer using only the context.
 """
 
-    response = llm.invoke(prompt)
+    response = client.models.generate_content(
+        model="gemini-3.6-flash",
+        contents=prompt
+    )
 
-    return response.content
+    return response.text
