@@ -1,14 +1,10 @@
-import os
 import streamlit as st
 from google import genai
 
 
 @st.cache_resource
 def get_llm():
-    api_key = os.getenv("GEMINI_API_KEY")
-
-    if not api_key:
-        raise ValueError("GEMINI_API_KEY is not set.")
+    api_key = st.secrets["GEMINI_API_KEY"]
 
     client = genai.Client(api_key=api_key)
 
@@ -44,8 +40,9 @@ You are a document question-answering assistant.
 Use the retrieved context as your source of truth.
 
 Rules:
+- Answer using only the provided context.
 - Combine information from multiple chunks when necessary.
-- Give a clear answer in 2-4 sentences.
+- Give a clear and concise answer.
 - Do not add unsupported information.
 - If the answer is not present in the context, say:
   "I couldn't find this information in the documents."
